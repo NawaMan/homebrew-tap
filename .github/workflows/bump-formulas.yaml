@@ -1,0 +1,108 @@
+# Points every formula in Formula/ at the newest stable release of its project
+# (bin/bump-formula.sh), proves each bumped one with brew audit/style/install/test
+# on Linux, and pushes one commit per bumped formula. Nothing newer = no commit.
+#
+# Triggers on: manual dispatch only — run it by hand after a release of
+# CodingBooth, EnvFolio or MarkDownViewer. dry_run does everything but the push.
+#
+# The macOS assets of a multi-platform formula (viewmd) get their sha256 from the
+# download, but only the Linux one is installed and tested here.
+name: Bump formulas
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Bump, audit and test, but do not push"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bump-formulas
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the tap
+        uses: actions/checkout@v4
+
+      - name: Test the bump script
+        run: tests/test-bump-formula.sh
+
+      - name: Bump each formula to its newest release
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          changed=()
+          {
+            echo "### Formulas"
+            echo
+            echo "| formula | result |"
+            echo "| --- | --- |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          for f in Formula/*.rb; do
+            name=$(basename "$f" .rb)
+            echo "::group::$name"
+            result=$(bin/bump-formula.sh "$f" | tee /dev/stderr | tail -n 1)
+            echo "::endgroup::"
+            read -r state version <<<"$result"
+            if [ "$state" = changed ]; then
+              git commit --quiet -m "$name $version" -- "$f"
+              changed+=("$name")
+              echo "| $name | **→ $version** |" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "| $name | $version, already the newest |" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+          echo "changed=${changed[*]}" >> "$GITHUB_OUTPUT"
+
+      - name: Audit, install and test the bumped formulas
+        if: steps.bump.outputs.changed != ''
+        env:
+          CHANGED: ${{ steps.bump.outputs.changed }}
+          HOMEBREW_NO_ANALYTICS: "1"
+          HOMEBREW_NO_ENV_HINTS: "1"
+        run: |
+          set -euo pipefail
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          # Tapping a local path clones it, so the tap sees the bump commits.
+          brew tap nawaman/tap "$GITHUB_WORKSPACE"
+          for name in $CHANGED; do
+            echo "::group::$name"
+            brew audit --strict --online --formula "nawaman/tap/$name"
+            brew style "nawaman/tap/$name"
+            brew install "nawaman/tap/$name"
+            brew test "nawaman/tap/$name"
+            echo "::endgroup::"
+          done
+
+      - name: Push
+        if: steps.bump.outputs.changed != ''
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ "$DRY_RUN" = true ]; then
+            {
+              echo
+              echo "Dry run — not pushed. The bump:"
+              echo
+              echo '```diff'
+              git diff "origin/${GITHUB_REF_NAME}" HEAD
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git push --quiet origin "HEAD:${GITHUB_REF_NAME}"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo "Pushed to ${GITHUB_REF_NAME}." >> "$GITHUB_STEP_SUMMARY"
