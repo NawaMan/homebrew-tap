@@ -14,6 +14,12 @@ class Codingbooth < Formula
 
   def install
     bin.install "booth"
+    # `booth completion bash|zsh|fish` arrived after 0.80.0; older wrappers would
+    # hand the unknown command to the binary, so ask only one that has it.
+    return unless (bin/"booth").read.include?("booth completion bash")
+
+    chmod 0755, bin/"booth" # the download is not executable until the install ends
+    generate_completions_from_executable(bin/"booth", "completion")
   end
 
   def caveats
@@ -27,5 +33,11 @@ class Codingbooth < Formula
 
   test do
     assert_match "CodingBooth Wrapper", shell_output("#{bin}/booth version")
+    return unless (bin/"booth").read.include?("booth completion bash")
+
+    assert_match "complete -F _booth_completion booth", (bash_completion/"booth").read
+    assert_match "#compdef booth", (zsh_completion/"_booth").read
+    assert_match "complete -c booth", (fish_completion/"booth.fish").read
+    assert_match "shell-config", shell_output("#{bin}/booth __complete sh")
   end
 end

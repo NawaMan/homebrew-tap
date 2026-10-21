@@ -8,6 +8,10 @@ brew install nawaman/tap/folio         # EnvFolio — texts and secrets on pass,
 brew install nawaman/tap/viewmd        # MarkDownViewer — browse Markdown in the browser
 ```
 
+`codingbooth` also installs tab completion for bash, zsh and fish (`booth completion <shell>`), once
+the release it points at has that command (after 0.80.0). Shells load it through Homebrew's
+[shell completion](https://docs.brew.sh/Shell-Completion) setup.
+
 ## Updating the formulas
 
 After a release of any of these, run the **Bump formulas** workflow (Actions →
