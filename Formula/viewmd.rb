@@ -11,23 +11,23 @@ class Viewmd < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.9.0/viewmd-darwin-arm64"
-      sha256 "56e69071c1ee255cf04c8326bf076d7e18fe54fa2853ae260d618556a899ac17"
+      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.10.0/viewmd-darwin-arm64"
+      sha256 "9f7796a8bb41c62904ede7ef57367c6310d51d0f4b362a755af67ea4be8ca2fa"
     end
     on_intel do
-      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.9.0/viewmd-darwin-amd64"
-      sha256 "ec2fa43075cdf94d25e9cdf0a7b1f55ca8c6662ebd1e5855063fc742517c787a"
+      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.10.0/viewmd-darwin-amd64"
+      sha256 "5a124cbc4628691529c766385d4890becb07cf06ed14d49f679923429343df7f"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.9.0/viewmd-linux-arm64"
-      sha256 "0b60319a8cd48416784e92c30f0ec5a133790577fc9071c1656e2b39d6e892f9"
+      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.10.0/viewmd-linux-arm64"
+      sha256 "1d9556b39ed8c635f0e3fa3126651af3c4f53ff02b6412a69c536d7f8f4d7380"
     end
     on_intel do
-      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.9.0/viewmd-linux-amd64"
-      sha256 "3a2bb8f1dfa860e1f9b8684c48ed7620917db377b506e91875687797c19c15d4"
+      url "https://github.com/NawaMan/MarkDownViewer/releases/download/v0.10.0/viewmd-linux-amd64"
+      sha256 "9091055313f901554cb7b209b8460464587ed4e8ca1a5dfd01a28355eb3a1844"
     end
   end
 
