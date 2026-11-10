@@ -1,7 +1,7 @@
 class Codingbooth < Formula
   desc "Reproducible, containerized dev environments for any project"
   homepage "https://codingbooth.io"
-  url "https://github.com/NawaMan/CodingBooth/releases/download/0.81.0/booth"
+  url "https://github.com/NawaMan/CodingBooth/releases/download/0.82.0/booth"
   sha256 "4f94764bce137f890b78a2b03079280d652edf49caf0d6a2bac67dee201e4ae8"
   license "Apache-2.0"
 
