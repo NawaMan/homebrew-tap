@@ -77,6 +77,8 @@ jobs:
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           # Tapping a local path clones it, so the tap sees the bump commits.
           brew tap nawaman/tap "$GITHUB_WORKSPACE"
+          # Homebrew refuses to load a non-official tap's formulae until it is trusted.
+          brew trust nawaman/tap
           for name in $CHANGED; do
             echo "::group::$name"
             brew audit --strict --online --formula "nawaman/tap/$name"
