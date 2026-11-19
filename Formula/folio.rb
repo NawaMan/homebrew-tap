@@ -23,7 +23,7 @@ class Folio < Formula
 
   def caveats
     <<~EOS
-      Folio (the folio command) keeps its store in ~/.folio (or $FOLIO_STORE_DIR).
+      EnvFolio (the folio command) keeps its store in ~/.folio (or $FOLIO_STORE_DIR).
       Create it with:  folio init
 
       Tab completion is installed for bash (needs bash-completion@2) and zsh

@@ -4,7 +4,7 @@ Homebrew formulas for NawaMan's tools.
 
 ```sh
 brew install nawaman/tap/codingbooth   # CodingBooth — the `booth` wrapper
-brew install nawaman/tap/folio         # Folio — texts and secrets on pass, as env vars
+brew install nawaman/tap/folio         # EnvFolio — texts and secrets on pass, as env vars
 brew install nawaman/tap/viewmd        # MarkDownViewer — browse Markdown in the browser
 ```
 
