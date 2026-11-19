@@ -1,8 +1,8 @@
 class Folio < Formula
   desc "Store texts and secrets on pass and load them as environment variables"
   homepage "https://github.com/NawaMan/EnvFolio"
-  url "https://github.com/NawaMan/EnvFolio/releases/download/v2.0.0/folio"
-  sha256 "9ca99adcefc3c413353cfab6ef9c1b0a3499bb1d6bbf81769c78844ca86b507c"
+  url "https://github.com/NawaMan/EnvFolio/releases/download/v2.1.0/folio"
+  sha256 "ac1d8fa294f575a5ec58bd30d25b2616d5fc097033eb60e663d399b12d6e887a"
   license "MIT"
 
   livecheck do
